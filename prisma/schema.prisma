@@ -1,0 +1,35 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @unique @default(autoincrement())
+  userName  String
+  email     String   @unique
+  avatarUrl String
+  createdAt DateTime @default(now())
+  status    Int
+  Order     Order[]
+}
+
+model Order {
+  id        Int       @id @default(autoincrement())
+  userId    Int
+  type      String // 订单类型，如"monthly", "quarterly", "yearly", "one-time"
+  createdAt DateTime  @default(now())
+  expiredAt DateTime? // 对于订阅类型的订单，表示订阅结束时间
+  credits   Int? // 对于一次性购买Credits的订单，表示购买的Credits数量
+  isPaid    Boolean   @default(false) // 表示订单是否已支付（即是否有效）
+  User      User      @relation(fields: [userId], references: [id])
+}

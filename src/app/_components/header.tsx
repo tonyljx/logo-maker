@@ -1,7 +1,8 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
-import { Button } from "../ui/button";
+import React, { useContext } from "react";
+import { Button } from "../../components/ui/button";
 import { UserButton, currentUser, useClerk } from "@clerk/nextjs";
 import {
   DropdownMenu,
@@ -13,12 +14,16 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { LogOut } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { SignOutButton } from "@clerk/nextjs";
+import { AppContext } from "@/contexts/AppContext";
 type Props = {};
 
-export default async function Header({}: Props) {
-  const user = await currentUser();
+export default function Header({}: Props) {
+  // const user = await currentUser();
   // const { signOut } = useClerk();
   // const router = useRouter();
+  const { user } = useContext(AppContext);
+  console.log("header user", user);
+
   return (
     <div className="flex justify-between border-b py-3">
       <a href="/" className="flex items-center gap-2">
@@ -76,7 +81,8 @@ export default async function Header({}: Props) {
                   Log out
                 </DropdownMenuItem> */}
                 <DropdownMenuItem>
-                  <SignOutButton />
+                  Hi
+                  {/* <SignOutButton /> */}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

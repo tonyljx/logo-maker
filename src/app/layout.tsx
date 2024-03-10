@@ -4,6 +4,7 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import { Toaster } from "react-hot-toast";
 import { ClerkProvider } from "@clerk/nextjs";
+import { AppContext, AppContextProvider } from "@/contexts/AppContext";
 
 const fontSans = FontSans({
   subsets: ["latin"],

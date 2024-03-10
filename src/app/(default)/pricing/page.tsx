@@ -1,6 +1,6 @@
 import React from "react";
 import Price from "../../_components/price";
-import Header from "@/components/common/header";
+import Header from "@/app/_components/header";
 
 type Props = {};
 

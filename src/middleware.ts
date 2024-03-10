@@ -2,9 +2,9 @@ import { authMiddleware, redirectToSignIn } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 
 export default authMiddleware({
-  publicRoutes: ["/", "/pricng"],
+  publicRoutes: ["/", "/pricng", "/api/subscribe/webhook"],
   afterAuth(auth, req, evt) {
-    console.log("after auth");
+    // console.log("after auth");
     if (!auth.userId && !auth.isPublicRoute) {
       if (auth.isApiRoute) {
         return NextResponse.json(

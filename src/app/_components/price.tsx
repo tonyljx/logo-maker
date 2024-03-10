@@ -1,16 +1,25 @@
 "use client";
-import { CheckCircleIcon } from "lucide-react";
-import React from "react";
+import { CheckCircleIcon, Loader2 } from "lucide-react";
+import React, { useEffect, useState } from "react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 interface PriceProps extends React.HTMLProps<HTMLDivElement> {
   // 你的自定义属性
 }
 
 export default function Price({ className }: PriceProps) {
-  // const [isMonth, setIsMonth] = useState(true);
+  // 环境变量读取lemon中的月，季度，年度id
+  const monthProductId = process.env.NEXT_PUBLIC_LEMON_SQUEEZY_VARIANT_MONTH!!;
+  const quarterProductId =
+    process.env.NEXT_PUBLIC_LEMON_SQUEEZY_VARIANT_QUARTER!!;
+  const yearProductId = process.env.NEXT_PUBLIC_LEMON_SQUEEZY_VARIANT_YEAR!!;
+  const router = useRouter();
+
+  const [loading, setLoading] = useState(false);
 
   const sliderVariants = {
     monthly: { x: 0 },
@@ -23,6 +32,7 @@ export default function Price({ className }: PriceProps) {
       price: "¥58",
       desc: "Free to use",
       features: ["无限视频生成", "高清视频导出"],
+      productId: monthProductId,
     },
     {
       plan: "季度计划",
@@ -33,8 +43,8 @@ export default function Price({ className }: PriceProps) {
         "优先视频处理队列",
         "提示词引导教程, 激发视频创意",
       ],
-
       popular: true,
+      productId: quarterProductId,
     },
     {
       plan: "年度计划",
@@ -45,44 +55,37 @@ export default function Price({ className }: PriceProps) {
         "独家访问新功能",
         "个性化视频建议",
       ],
+      productId: yearProductId,
     },
   ];
 
-  const yearPriceStrategy = [
-    {
-      plan: "Standard",
-      price: "free",
-      desc: "Free to use",
-      features: [
-        "1 macOS device",
-        "Pay once, use forever",
-        "All screen Studio features",
-        "1 year of updates",
-      ],
-    },
-    {
-      plan: "Extended",
-      price: "$7.99",
-      desc: "Great for multi-devices setups & small teams.",
-      features: [
-        "3 macOS device",
-        "Pay once, use forever",
-        "All screen Studio features",
-        "1 year of updates",
-      ],
-      popular: true,
-    },
-    {
-      plan: "Pro",
-      price: "$11.99",
-      desc: "Pay per seat for your team.",
-      features: [
-        "unlimited macOS device",
-        "All screen Studio features",
-        "App updates during the subscription",
-      ],
-    },
-  ];
+  const subscribe = async (productId: string) => {
+    try {
+      setLoading(true);
+      const resp = await fetch("/api/subscribe", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ productId: productId }),
+      });
+      if (resp.ok) {
+        const res = await resp.json();
+        console.log(res);
+
+        // LemonSqueezy.Url.Open(res?.data);
+        toast.success("Ready to redirect to checkout page in 2s");
+        setTimeout(() => {
+          router.push(res?.data);
+        }, 1000);
+      }
+    } catch (error) {
+      toast.error("error try again later");
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className={cn(className)}>
@@ -91,7 +94,7 @@ export default function Price({ className }: PriceProps) {
       </h2>
 
       <p className="mt-6 text-center text-[16px] leading-7 text-muted-foreground">
-        选择你的计划, 马上获取无限视频创作能力, 解锁 AI 视频的潜力
+        选择你的计划, 马上获取无限创作能力, 解锁 AI 生成Logo的潜力
       </p>
 
       {/* month or year plan */}
@@ -128,7 +131,13 @@ export default function Price({ className }: PriceProps) {
               ))}
             </ul>
 
-            <Button>Order</Button>
+            <Button
+              onClick={() => subscribe(item.productId)}
+              className="flex gap-2"
+            >
+              {loading && <Loader2 className="h-4 w-4 animate-spin" />}
+              Order
+            </Button>
           </div>
         ))}
       </div>
