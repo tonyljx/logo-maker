@@ -1,4 +1,4 @@
-import Header from "@/app/_components/header";
+import Header from "@/components/common/header";
 import PromptInput from "../_components/prompt-input";
 import LogosGrid from "../_components/logos-grid";
 import Footer from "@/components/common/footer";

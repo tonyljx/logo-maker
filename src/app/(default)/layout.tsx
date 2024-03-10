@@ -1,6 +1,7 @@
 "use client";
 import Footer from "@/components/common/footer";
 import { AppContextProvider } from "@/contexts/AppContext";
+import Header from "../../components/common/header";
 
 export default function DefaultLayout({
   children, // will be a page or nested layout

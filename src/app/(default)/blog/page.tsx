@@ -1,5 +1,5 @@
 "use client";
-import Header from "@/app/_components/header";
+import Header from "@/components/common/header";
 import { Button } from "@/components/ui/button";
 import { redirect, useRouter } from "next/navigation";
 import React, { useEffect } from "react";

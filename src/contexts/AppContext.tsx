@@ -13,7 +13,7 @@ export const AppContextProvider = ({ children }: ContextProviderProps) => {
   const [user, setUser] = useState<User | null | undefined>(undefined);
 
   const fetchUserInfo = async function () {
-    console.log("fetch user info!!!!!!!!!!!! context");
+    // console.log("fetch user info!!!!!!!!!!!! context");
     try {
       const params = {};
 
@@ -21,10 +21,10 @@ export const AppContextProvider = ({ children }: ContextProviderProps) => {
 
       if (resp.ok) {
         const res = await resp.json();
-        console.log(res.data);
+        // console.log("context res ", res);
 
-        if (res.data) {
-          setUser(res.data);
+        if (res) {
+          setUser(res);
           return;
         }
       }
