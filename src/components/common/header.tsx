@@ -12,10 +12,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Loader2, Settings } from "lucide-react";
+import { Loader2, LogOut, Settings } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { AppContext } from "@/contexts/AppContext";
 import { cn } from "@/lib/utils";
+import { SignOutButton, useClerk } from "@clerk/nextjs";
 
 type Props = {};
 
@@ -26,9 +27,9 @@ const headerRoutes = [
 
 export default function Header({}: Props) {
   // const user = await currentUser();
-  // const { signOut } = useClerk();
+  const { signOut } = useClerk();
 
-  const { user } = useContext(AppContext);
+  const { user, fetchUserInfo } = useContext(AppContext);
 
   const pathName = usePathname();
 

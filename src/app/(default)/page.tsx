@@ -1,5 +1,5 @@
 import Header from "@/components/common/header";
-import PromptInput from "../_components/prompt-input";
+import PromptInput from "../_components/prompt/prompt-input";
 import LogosGrid from "../_components/logos-grid";
 import Footer from "@/components/common/footer";
 

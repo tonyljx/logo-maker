@@ -12,6 +12,14 @@ const nextConfig = {
         hostname: "plus.unsplash.com",
         port: "",
       },
+      {
+        protocol: "https",
+        hostname: "replicate.com",
+      },
+      {
+        protocol: "https",
+        hostname: "replicate.delivery",
+      },
     ],
   },
 };
