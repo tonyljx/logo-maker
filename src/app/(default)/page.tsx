@@ -5,7 +5,7 @@ import Footer from "@/components/common/footer";
 
 export default function Home() {
   return (
-    <main className="container flex flex-col gap-6 py-5">
+    <main className="container flex flex-col gap-6 ">
       {/* flex min-h-screen flex-col items-center justify-between p-24 */}
       <Header />
       <h2 className="mt-16 text-center text-2xl font-semibold md:text-3xl">

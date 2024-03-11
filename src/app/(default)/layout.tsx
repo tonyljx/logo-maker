@@ -13,7 +13,7 @@ export default function DefaultLayout({
       <AppContextProvider>
         {/* Include shared UI here e.g. a header or sidebar */}
 
-        {children}
+        <div className="py-3">{children}</div>
         <Footer />
 
         {/* <script src="https://app.lemonsqueezy.com/js/lemon.js" defer></script> */}

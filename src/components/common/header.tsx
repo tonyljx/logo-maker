@@ -11,7 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { LogOut } from "lucide-react";
+import { LogOut, PersonStandingIcon, Settings } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { SignOutButton } from "@clerk/nextjs";
 import { AppContext } from "@/contexts/AppContext";
@@ -81,7 +81,13 @@ export default function Header({}: Props) {
                   Log out
                 </DropdownMenuItem> */}
                 <DropdownMenuItem>
-                  Hi
+                  <Link
+                    className="flex items-center gap-2 p-1"
+                    href="/settings"
+                  >
+                    <Settings className=" h-4 w-4" />
+                    Settings
+                  </Link>
                   {/* <SignOutButton /> */}
                 </DropdownMenuItem>
               </DropdownMenuContent>
