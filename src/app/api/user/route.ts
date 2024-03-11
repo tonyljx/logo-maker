@@ -1,6 +1,7 @@
 import { currentUser } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 import { createUserIfNotExists } from "../../../../server/user";
+import { getUserStatus } from "../../../../server/order";
 
 // const requestJson = await request.json();
 
@@ -31,10 +32,13 @@ export async function GET(request: Request) {
    */
   const res = await createUserIfNotExists(data);
 
-  console.log("res ", res);
+  // console.log("res", res);
+  const userStatus = await getUserStatus(user.emailAddresses[0].emailAddress);
 
   try {
-    return new Response(JSON.stringify({ ...res }), { status: 200 });
+    return new Response(JSON.stringify({ ...res, userStatus }), {
+      status: 200,
+    });
   } catch (error) {
     return Response.json({ error });
   }

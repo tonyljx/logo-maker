@@ -20,16 +20,14 @@ model User {
   avatarUrl String
   createdAt DateTime @default(now())
   status    Int
-  Order     Order[]
 }
 
 model Order {
-  id        Int       @id @default(autoincrement())
-  userId    Int
-  type      String // 订单类型，如"monthly", "quarterly", "yearly", "one-time"
+  orderId   String    @id @default(uuid())
+  userEmail String
+  type      String // 订单类型，如"month", "quarter", "year", "one-time"
   createdAt DateTime  @default(now())
   expiredAt DateTime? // 对于订阅类型的订单，表示订阅结束时间
   credits   Int? // 对于一次性购买Credits的订单，表示购买的Credits数量
-  isPaid    Boolean   @default(false) // 表示订单是否已支付（即是否有效）
-  User      User      @relation(fields: [userId], references: [id])
+  isPaid    Int // 表示订单是否已支付（即是否有效） 1已支付 0未支付
 }

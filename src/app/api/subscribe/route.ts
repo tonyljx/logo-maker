@@ -5,21 +5,42 @@
 
 import { currentUser } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
+import { createOrder } from "../../../../server/order";
+
+// 定义索引类型，以接受任何字符串作为键，值为string或undefined
+interface TypeToVariantMap {
+  [key: string]: string | undefined;
+}
+
+const typeToVariant: TypeToVariantMap = {
+  month: process.env.LEMON_SQUEEZY_VARIANT_MONTH!,
+  quarter: process.env.LEMON_SQUEEZY_VARIANT_QUARTER!,
+  year: process.env.LEMON_SQUEEZY_VARIANT_YEAR!,
+};
 
 export async function POST(request: Request) {
   const user = await currentUser();
   const reqJson = await request.json();
-  // 1. 用户不登录的话, 直接报错
+  // 1.1: 校验: 用户不登录的话, 直接报错
   if (!user || !user.emailAddresses || user.emailAddresses.length === 0) {
     return NextResponse.json({ message: "not authenticated" }, { status: 401 });
   }
 
-  // 2. 获取用户的productId, 对应到variantId, 如果 productId为空, 报错
-  // 286113
-  const productId = reqJson["productId"] as string;
+  // 1.2: 校验: 获取用户的productId, 对应到variantId, 如果 productId为空, 报错
+
+  const type = reqJson["type"] as string;
+  const productId = typeToVariant[type];
   if (!productId) {
     return NextResponse.json({ message: "productId null" }, { status: 400 });
   }
+
+  // 2.1: 创建订单
+  const order = await createOrder(
+    user.emailAddresses[0].emailAddress,
+    type,
+    new Date(),
+    0,
+  );
 
   const lemonUrl = process.env.LEMON_SQUEEZY_HOST!!;
   const lemonStoreId = process.env.LEMON_SQUEEZY_STORE_ID;
@@ -39,10 +60,11 @@ export async function POST(request: Request) {
             userId: user.id,
             name: user.username,
             email: user.emailAddresses[0].emailAddress,
+            orderId: order.orderId,
           },
         },
         product_options: {
-          redirect_url: "https://1g98s5p6-3000.asse.devtunnels.ms/",
+          // redirect_url: "https://1g98s5p6-3000.asse.devtunnels.ms/",
         },
       },
       relationships: {

@@ -14,3 +14,11 @@ export type UserQuery = {
   avatarUrl: string;
   status: number;
 };
+
+/**
+ * 客户端需要使用的类型
+ */
+export interface UserStatus {
+  status: "unsubscribed" | "month" | "quarter" | "year" | "one-time";
+  expiredAt: Date | null;
+}

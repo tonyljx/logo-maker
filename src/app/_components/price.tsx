@@ -13,10 +13,7 @@ interface PriceProps extends React.HTMLProps<HTMLDivElement> {
 
 export default function Price({ className }: PriceProps) {
   // 环境变量读取lemon中的月，季度，年度id
-  const monthProductId = process.env.NEXT_PUBLIC_LEMON_SQUEEZY_VARIANT_MONTH!!;
-  const quarterProductId =
-    process.env.NEXT_PUBLIC_LEMON_SQUEEZY_VARIANT_QUARTER!!;
-  const yearProductId = process.env.NEXT_PUBLIC_LEMON_SQUEEZY_VARIANT_YEAR!!;
+
   const router = useRouter();
 
   const [loading, setLoading] = useState(false);
@@ -32,7 +29,7 @@ export default function Price({ className }: PriceProps) {
       price: "¥58",
       desc: "Free to use",
       features: ["无限视频生成", "高清视频导出"],
-      productId: monthProductId,
+      productId: "month",
     },
     {
       plan: "季度计划",
@@ -44,7 +41,7 @@ export default function Price({ className }: PriceProps) {
         "提示词引导教程, 激发视频创意",
       ],
       popular: true,
-      productId: quarterProductId,
+      productId: "quarter",
     },
     {
       plan: "年度计划",
@@ -55,7 +52,7 @@ export default function Price({ className }: PriceProps) {
         "独家访问新功能",
         "个性化视频建议",
       ],
-      productId: yearProductId,
+      productId: "year",
     },
   ];
 
@@ -67,7 +64,7 @@ export default function Price({ className }: PriceProps) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ productId: productId }),
+        body: JSON.stringify({ type: productId }),
       });
       if (resp.ok) {
         const res = await resp.json();

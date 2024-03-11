@@ -1,9 +1,18 @@
-export type Order = {
-  id: number;
-  userId: number;
+export type OrderReq = {
+  userEmail: string;
   type: string;
-  createdAt: Date | null;
+  createdAt: Date;
   expiredAt?: Date | null;
   credits?: number | null;
-  isPaid: boolean;
+  isPaid: number;
+};
+
+export type Order = {
+  orderId: string;
+  userEmail: string;
+  type: string;
+  createdAt: Date;
+  expiredAt?: Date | null;
+  credits?: number | null;
+  isPaid: number;
 };

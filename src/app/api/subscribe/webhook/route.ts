@@ -1,6 +1,7 @@
 import { Buffer } from "buffer";
 import crypto from "crypto";
 import { NextResponse } from "next/server";
+import { updateOrderPaymentStatus } from "../../../../../server/order";
 // Put this in your billing lib and just import the type instead
 
 export async function POST(request: Request) {
@@ -39,19 +40,26 @@ export async function POST(request: Request) {
       { status: 403 },
     );
 
-  // 正式处理
-  const first_subscription_item =
-    payload.data.attributes.first_subscription_item || null;
-  console.log(
-    "first_subscription_item  " + JSON.stringify(first_subscription_item),
-  );
+  // 订阅订单
+  // const first_subscription_item =
+  //   payload.data.attributes.first_subscription_item || null;
+  // console.log(
+  //   "first_subscription_item  " + JSON.stringify(first_subscription_item),
+  // );
+
+  // order订单
+  // const first_order_item = payload.data.attributes.first_order_item || null;
+  // console.log("first_order_item  " + JSON.stringify(first_order_item));
 
   /**
    * 拿到lemon的回调数据
    */
   const {
-    meta: { event_name: eventName },
-    data: subscription,
+    meta: {
+      event_name: eventName,
+      custom_data: { email, orderId },
+    },
+    data,
   } = payload;
 
   /**
@@ -60,13 +68,24 @@ export async function POST(request: Request) {
 
   switch (eventName) {
     case "order_created":
-      // Do stuff here if you are using orders
-      console.log("Order created");
+      // https://docs.lemonsqueezy.com/api/orders#the-order-object
+      if (!email || !orderId) {
+        return NextResponse.json({ message: "failed" }, { status: 400 });
+      }
+
+      const payStatus = data?.attributes?.status;
+
+      if (payStatus === "paid") {
+        updateOrderPaymentStatus(orderId as string, email as string, 1);
+      }
+      console.log(`Order created email ${orderId} ${email} ${payStatus}`);
       break;
     case "order_refunded":
       // Do stuff here if you are using orders
       break;
     case "subscription_created":
+      console.log(`Subscription created`);
+      break;
     case "subscription_cancelled":
     case "subscription_resumed":
     case "subscription_expired":
@@ -77,7 +96,7 @@ export async function POST(request: Request) {
     case "subscription_payment_recovered":
     case "subscription_updated":
       // Do something with the subscription here, like syncing to your database
-      console.log(subscription);
+      console.log(data);
       break;
     default:
       throw new Error(`🤷‍♀️ Unhandled event: ${eventName}`);

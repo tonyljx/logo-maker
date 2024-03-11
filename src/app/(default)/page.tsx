@@ -18,8 +18,6 @@ export default function Home() {
       <PromptInput />
 
       <LogosGrid />
-
-      <Footer />
     </main>
   );
 }
