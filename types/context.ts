@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import { TImgShowBackend } from "./img";
-import { User, UserStatus } from "./user";
+import { User, UserQuery, UserStatus } from "./user";
 
 export interface ContextProviderValue {
   user: User | null | undefined;
