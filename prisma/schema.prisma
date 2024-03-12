@@ -31,3 +31,11 @@ model Order {
   credits   Int? // 对于一次性购买Credits的订单，表示购买的Credits数量
   isPaid    Int // 表示订单是否已支付（即是否有效） 1已支付 0未支付
 }
+
+model Image {
+  imgId     String   @id @default(uuid())
+  userEmail String
+  createdAt DateTime @default(now())
+  src       String
+  prompt    String
+}

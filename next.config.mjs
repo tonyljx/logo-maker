@@ -20,6 +20,14 @@ const nextConfig = {
         protocol: "https",
         hostname: "replicate.delivery",
       },
+      {
+        protocol: "https",
+        hostname: "fly.storage.tigris.dev",
+      },
+      {
+        protocol: "https",
+        hostname: "logomakers.s3.ap-southeast-1.amazonaws.com",
+      },
     ],
   },
 };

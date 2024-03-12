@@ -12,7 +12,7 @@ import toast from "react-hot-toast";
 type Props = {};
 
 export default function PromptInput({}: Props) {
-  const { userStatus } = useContext(AppContext);
+  const { userStatus, fetchPhotos } = useContext(AppContext);
   const [inputV, setInputValue] = useState("");
   const [loading, setLoading] = useState(false);
   const [imgUrl, setImgUrl] = useState("");
@@ -48,9 +48,10 @@ export default function PromptInput({}: Props) {
         const errorMessage = await res.json();
         toast.error(errorMessage);
       }
-      setImgUrl(newPhoto?.imgUrl[0]);
-      setLimit((prev) => prev - 1);
-      toast.success(`Total free credit 2, remaining credit ${limit}`);
+      setImgUrl(newPhoto?.imgUrl);
+      setLimit(limit - 1);
+      toast.success(`Total free credit 2, remaining credit ${limit - 1}`);
+      await fetchPhotos();
     } catch (error) {
       toast.error("error generating image");
     } finally {
@@ -78,8 +79,8 @@ export default function PromptInput({}: Props) {
       </div>
 
       {loading && (
-        <Skeleton className="mt-10 flex h-[10rem] w-[10rem] items-center justify-center self-center rounded bg-purple-200">
-          <LoaderCircle className="h-8 w-8 animate-spin stroke-orange-50 " />
+        <Skeleton className="mt-10 flex h-[20rem] w-[20rem] items-center justify-center self-center rounded bg-slate-100">
+          <LoaderCircle className="h-8 w-8 animate-spin  " />
         </Skeleton>
       )}
 
