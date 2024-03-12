@@ -6,19 +6,19 @@ import { prisma } from "./db";
  * @returns
  */
 async function queryUserCredits(
-  userId: number,
+  email: string,
 ): Promise<{ isSubscriber: boolean; oneTimeCredits: number }> {
   // 检查是否存在有效的订阅
   const subscription = await prisma.order.findFirst({
     where: {
-      userId,
+      userEmail: email,
       type: {
         not: "one-time",
       },
       expiredAt: {
         gt: new Date(),
       },
-      isPaid: true,
+      isPaid: 1,
     },
   });
 
@@ -28,9 +28,9 @@ async function queryUserCredits(
       credits: true,
     },
     where: {
-      userId,
+      userEmail: email,
       type: "one-time",
-      isPaid: true,
+      isPaid: 1,
     },
   });
 
@@ -48,17 +48,17 @@ async function queryUserCredits(
  */
 
 async function deductCredits(
-  userId: number,
+  userEmail: string,
   creditsToDeduct: number,
 ): Promise<void> {
   const orders = await prisma.order.findMany({
     where: {
-      userId,
+      userEmail,
       type: "one-time",
       credits: {
         gt: 0,
       },
-      isPaid: true,
+      isPaid: 1,
     },
     orderBy: {
       createdAt: "asc",
@@ -72,7 +72,7 @@ async function deductCredits(
     if (availableCredits >= creditsToDeduct) {
       await prisma.order.update({
         where: {
-          id: order.id,
+          orderId: order.orderId,
         },
         data: {
           credits: availableCredits - creditsToDeduct,
@@ -82,7 +82,7 @@ async function deductCredits(
     } else {
       await prisma.order.update({
         where: {
-          id: order.id,
+          orderId: order.orderId,
         },
         data: {
           credits: 0,
