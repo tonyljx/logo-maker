@@ -75,9 +75,9 @@ export default function Header({}: Props) {
                 {/* <span className="text-base font-bold">Hi</span> */}
                 <DropdownMenu>
                   <DropdownMenuTrigger>
-                    {user?.imageUrl ? (
+                    {user?.avatarUrl ? (
                       <Avatar>
-                        <AvatarImage src={user?.imageUrl} />
+                        <AvatarImage src={user?.avatarUrl} />
                         <AvatarFallback>CN</AvatarFallback>
                       </Avatar>
                     ) : (
